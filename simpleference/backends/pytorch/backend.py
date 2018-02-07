@@ -14,7 +14,8 @@ class PyTorchPredict(object):
         # NOTE we always set CUDA_VISIBLE_DEVICES to our desired gpu
         # so we can always assume gpu 0 here
         self.gpu = gpu
-        self.model.cuda(self.gpu)
+        self.model.cpu()
+        # self.model.cuda(self.gpu)
         # validate cropping
         if crop is not None:
             assert isinstance(crop, (list, tuple))
@@ -32,9 +33,9 @@ class PyTorchPredict(object):
         assert isinstance(input_data, np.ndarray)
         assert input_data.ndim == 3
         with self.lock:
-            torch_data = Variable(torch.from_numpy(input_data[None, None]).cuda(self.gpu),
+            torch_data = Variable(torch.from_numpy(input_data[None, None]),
                                   volatile=True)
-            out = self.model(torch_data).cpu().data.numpy().squeeze()
+            out = self.model(torch_data).data.numpy().squeeze()
         if self.crop is not None:
             out = self.apply_crop(out)
         return out

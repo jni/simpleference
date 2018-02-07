@@ -14,7 +14,7 @@ def single_gpu_inference(sample, gpu):
     raw_path = user('~/data/cremi_sample%s.n5' % sample)
     out_file = user('~/data/sample%s_affinities_pytorch_test.n5' % sample)
 
-    model_path = user('~/data/model.pytorch')
+    model_path = user('~/data/model_cpu.pytorch')
 
     offset_file = './offsets_sample%s/list_gpu_%i.json' % (sample, gpu)
     with open(offset_file, 'r') as f:
