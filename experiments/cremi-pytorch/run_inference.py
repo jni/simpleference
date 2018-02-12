@@ -16,7 +16,7 @@ def single_gpu_inference(sample, gpu):
     model_path = '/groups/saalfeld/home/papec/Work/neurodata_hdd/networks/neurofire'
     model_path = os.path.join(model_path, 'criteria_exps/sorensen_dice_unweighted/Weights/networks/model.pytorch')
 
-    offset_file = './offsets_sample%s/list_gpu_%i.json' % (sample, gpu)
+    offset_file = './offsets_sample%s/list_gpu_%i.json' % (sample, 0)
     with open(offset_file, 'r') as f:
         offset_list = json.load(f)
 
@@ -36,11 +36,13 @@ def single_gpu_inference(sample, gpu):
                      target_keys=('affs_xy', 'affs_z'),
                      input_shape=input_shape,
                      output_shape=output_shape,
-                     only_nn_affs=True)
+                     only_nn_affs=True,
+                     num_cpus=4 * len(gpu))
     t_predict = time.time() - t_predict
 
-    with open(os.path.join(out_file, 't-inf_gpu%i.txt' % gpu), 'w') as f:
-        f.write("Inference with gpu %i in %f s" % (gpu, t_predict))
+    print('Prediction took %f seconds using GPUs %s' % str(gpu))
+    #with open(os.path.join(out_file, 't-inf_gpu%i.txt' % gpu), 'w') as f:
+    #    f.write("Inference with gpu %i in %f s" % (gpu, t_predict))
     return True
 
 

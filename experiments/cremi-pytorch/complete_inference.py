@@ -33,11 +33,9 @@ def complete_inference(sample, gpu_list):
     # make the offset files, that assign blocks to gpus
     save_folder = './offsets_sample%s' % sample
     output_shape = (56, 56, 56)
-    get_offset_lists(shape, gpu_list, save_folder, output_shape=output_shape)
+    get_offset_lists(shape, [0], save_folder, output_shape=output_shape)
 
-    tasks = [delayed(single_gpu_inference)(sample, gpu) for gpu in gpu_list]
-    result = compute(*tasks, traverse=False,
-                     get=threaded.get, num_workers=len(gpu_list))
+    single_gpu_inference(sample, gpu_list)
 
     if all(result):
         print("All gpu's finished inference properly.")
