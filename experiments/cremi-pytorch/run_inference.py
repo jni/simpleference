@@ -8,15 +8,14 @@ from simpleference.backends.pytorch import PyTorchPredict
 from simpleference.backends.pytorch.preprocess import preprocess
 
 
-def single_gpu_inference(sample, gpu):
-    raw_path = '/groups/saalfeld/home/papec/Work/neurodata_hdd/cremi_warped/sample%s.n5' % sample
-    out_file = '/groups/saalfeld/home/papec/Work/neurodata_hdd/inference_tests/torch_master_test_sample%s.n5' % sample
+def single_gpu_inference(config, gpu):
+    raw_path = config['raw_path']
+    out_file = config['out_file']
     assert os.path.exists(out_file)
 
-    model_path = '/groups/saalfeld/home/papec/Work/neurodata_hdd/networks/neurofire'
-    model_path = os.path.join(model_path, 'criteria_exps/sorensen_dice_unweighted/Weights/networks/model.pytorch')
+    model_path = config['model_path']
 
-    offset_file = './offsets_sample%s/list_gpu_%i.json' % (sample, gpu)
+    offset_file = offset_file['gpu'] % gpu
     with open(offset_file, 'r') as f:
         offset_list = json.load(f)
 
