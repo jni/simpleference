@@ -1,4 +1,5 @@
 from __future__ import print_function
+import yaml
 import z5py
 from dask import delayed, compute, threaded
 from simpleference.inference.util import get_offset_lists
@@ -6,16 +7,22 @@ from simpleference.inference.util import get_offset_lists
 from run_inference import single_gpu_inference
 
 
-def complete_inference(sample, gpu_list):
+def complete_inference(config_file):
+
+    # load parameters from JSON config file
+    with open(config_file, 'r') as conf:
+        config = yaml.load(conf)
+
+    sample = config['sample']
 
     # path to the raw data
-    raw_path = '/groups/saalfeld/home/papec/Work/neurodata_hdd/cremi_warped/sample%s.n5' % sample
+    raw_path = config['raw_path']
     rf = z5py.File(raw_path, use_zarr_format=False)
     shape = rf['raw'].shape
 
     # create the datasets
-    out_shape = (56,) * 3
-    out_file = '/groups/saalfeld/home/papec/Work/neurodata_hdd/inference_tests/torch_master_test_sample%s.n5' % sample
+    out_shape = config['out_shape']
+    out_file = config['out_file']
 
     # the n5 file might exist already
     f = z5py.File(out_file, use_zarr_format=False)
@@ -31,8 +38,9 @@ def complete_inference(sample, gpu_list):
                          chunks=out_shape)
 
     # make the offset files, that assign blocks to gpus
-    save_folder = './offsets_sample%s' % sample
-    output_shape = (56, 56, 56)
+    save_folder = config['save_folder']
+    output_shape = config['output_shape']
+    gpu_list = config['gpu_list']
     get_offset_lists(shape, gpu_list, save_folder, output_shape=output_shape)
 
     tasks = [delayed(single_gpu_inference)(sample, gpu) for gpu in gpu_list]
@@ -46,6 +54,5 @@ def complete_inference(sample, gpu_list):
 
 
 if __name__ == '__main__':
-    for sample in ('A+',):
-        gpu_list = list(range(8))
-        complete_inference(sample, gpu_list)
+    config_file = sys.argv[1] if len(sys.argv) > 1 else 'config.yaml'
+    complete_inference(config_file)
