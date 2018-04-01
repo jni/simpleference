@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+import sys
 import z5py
 from dask import delayed, compute, threaded
 from simpleference.inference.util import get_offset_lists
@@ -49,6 +50,7 @@ def complete_inference(sample, gpu_list):
 
 
 if __name__ == '__main__':
+    gpu = int(sys.argv[1])
     for sample in ('A+',):
-        gpu_list = list(range(8))
+        gpu_list = [gpu]
         complete_inference(sample, gpu_list)
