@@ -10,13 +10,15 @@ from run_inference import single_gpu_inference
 def complete_inference(sample, gpu_list):
 
     # path to the raw data
-    raw_path = '/groups/saalfeld/home/papec/Work/neurodata_hdd/cremi_warped/sample%s.n5' % sample
+    raw_path = ('/groups/saalfeld/home/papec/Work/neurodata_hdd/'
+                'cremi_warped/sample%s.n5' % sample)
     rf = z5py.File(raw_path, use_zarr_format=False)
     shape = rf['raw'].shape
 
     # create the datasets
     out_shape = (56,) * 3
-    out_file = '/groups/saalfeld/home/papec/torch_master_test_sample%s.n5' % sample
+    out_file = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'
+                'torch_master_test_sample%s.n5' % sample)
 
     # the n5 file might exist already
     if not os.path.exists(out_file):
@@ -31,7 +33,8 @@ def complete_inference(sample, gpu_list):
                          chunks=out_shape)
 
     # make the offset files, that assign blocks to gpus
-    save_folder = './offsets_sample%s' % sample
+    save_folder = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'
+                   'offsets_sample%s' % sample)
     output_shape = (56, 56, 56)
     get_offset_lists(shape, gpu_list, save_folder, output_shape=output_shape)
 
