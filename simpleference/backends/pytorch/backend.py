@@ -23,10 +23,15 @@ class PyTorchPredict(object):
         self.lock = threading.Lock()
 
     def apply_crop(self, out):
-        shape_diff = tuple((shape - crop) // 2
-                           for shape, crop in zip(out.shape, self.crop))
-        bb = tuple(slice(diff, shape - diff) for diff, shape in zip(shape_diff, out.shape))
-        return out[bb]
+        shape = out.shape if out.ndim == 3 else out.shape[1:]
+        shape_diff = tuple((sha - crop) // 2
+                           for sha, crop in zip(shape, self.crop))
+        bb = tuple(slice(diff, shape - diff)
+				   for diff, shape in zip(shape_diff, shape))
+        if out.ndim == 4:
+            bb = (slice(None),) + bb
+        out = out[bb]
+        return out
 
     def __call__(self, input_data):
         assert isinstance(input_data, np.ndarray)
