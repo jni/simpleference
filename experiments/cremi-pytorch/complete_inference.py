@@ -19,7 +19,7 @@ def complete_inference(sample, gpu_list):
     # create the datasets
     out_shape = (56,) * 3
     out_file = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'
-                'torch_master_test_sample%s.n5' % sample)
+                'torch_master_test_block2_sample%s.n5' % sample)
 
     # the n5 file might exist already
     if not os.path.exists(out_file):

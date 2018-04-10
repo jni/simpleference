@@ -12,7 +12,7 @@ def single_gpu_inference(sample, gpu):
     raw_path = ('/groups/saalfeld/home/papec/Work/neurodata_hdd/'
                 'cremi_warped/sample%s.n5' % sample)
     out_file = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'
-                'torch_master_test_sample%s.n5' % sample)
+                'torch_master_test_block2_sample%s.n5' % sample)
     assert os.path.exists(out_file)
 
     model_path = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'

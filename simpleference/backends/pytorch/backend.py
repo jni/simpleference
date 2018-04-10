@@ -41,15 +41,15 @@ class PyTorchPredict(object):
         # better performance by only locking in step 2, or steps 1-2, or steps
         # 2-3. We should perform this experiment and then choose the best
         # option for our hardware (and then remove this comment! ;)
+        # 1. Transfer the data to the GPU
+        torch_data = Variable(torch.from_numpy(input_data[None, None])
+                              .cuda(self.gpu), volatile=True)
         with self.lock:
-            # 1. Transfer the data to the GPU
-            torch_data = Variable(torch.from_numpy(input_data[None, None])
-                                  .cuda(self.gpu), volatile=True)
             print('predicting a block!')
             # 2. Run the model
             predicted_on_gpu = self.model(torch_data)
-            # 3. Transfer the results to the CPU
-            out = predicted_on_gpu.cpu().data.numpy().squeeze()
+        # 3. Transfer the results to the CPU
+        out = predicted_on_gpu.cpu().data.numpy().squeeze()
         if self.crop is not None:
             out = self.apply_crop(out)
         return out
