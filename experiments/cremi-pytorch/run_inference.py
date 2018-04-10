@@ -15,9 +15,8 @@ def single_gpu_inference(sample, gpu):
                 'torch_master_test_sample%s.n5' % sample)
     assert os.path.exists(out_file)
 
-    model_path = ('/groups/saalfeld/home/papec/Work/neurodata_hdd/'
-                  'networks/neurofire/criteria_exps/sorensen_dice_unweighted/'
-                  'Weights/networks/model.pytorch')
+    model_path = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'
+                  'model.pytorch')
 
     offset_file = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'
                    'offsets_sample%s/list_gpu_%i.json' % (sample, gpu))
