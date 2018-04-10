@@ -51,6 +51,6 @@ def complete_inference(sample, gpu_list):
 
 if __name__ == '__main__':
     gpu = int(sys.argv[1])
-    for sample in ('A+',):
+    for sample in ('A',):
         gpu_list = [gpu]
         complete_inference(sample, gpu_list)
