@@ -21,7 +21,7 @@ def single_gpu_inference(sample, gpu):
     offset_file = ('/groups/saalfeld/home/nuneziglesiasj/data/simpleference/'
                    'offsets_sample%s/list_gpu_%i.json' % (sample, gpu))
     with open(offset_file, 'r') as f:
-        offset_list = json.load(f)
+        offset_list = json.load(f)[:100]
 
     input_shape = (84, 270, 270)
     output_shape = (56, 56, 56)
