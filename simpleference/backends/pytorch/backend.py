@@ -48,8 +48,8 @@ class PyTorchPredict(object):
             print('predicting a block!')
             # 2. Run the model
             predicted_on_gpu = self.model(torch_data)
-        # 3. Transfer the results to the CPU
-        out = predicted_on_gpu.cpu().data.numpy().squeeze()
+            # 3. Transfer the results to the CPU
+            out = predicted_on_gpu.cpu().data.numpy().squeeze()
         if self.crop is not None:
             out = self.apply_crop(out)
         return out
