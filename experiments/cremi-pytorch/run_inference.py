@@ -40,8 +40,8 @@ def single_gpu_inference(sample, gpu):
                      output_shape=output_shape)
     t_predict = time.time() - t_predict
 
-    with open(os.path.join(out_file, 't-inf_gpu%i.txt' % gpu), 'w') as f:
-        f.write("Inference with gpu %i in %f s" % (gpu, t_predict))
+    with open(os.path.join(out_file, 't-inf_gpu%i.txt' % gpu), 'a') as f:
+        f.write("Inference with gpu %i in %f s\n" % (gpu, t_predict))
     return True
 
 
